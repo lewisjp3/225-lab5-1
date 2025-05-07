@@ -82,7 +82,32 @@ pipeline {
                 }
             }
         }
-         
+
+        stage ("Run Security Checks") {
+            steps {
+                //                                                                 ###change the IP address in this section to your cluster IP address!!!!####
+                sh 'docker pull public.ecr.aws/portswigger/dastardly:latest'
+                sh '''
+                    docker run --user $(id -u) -v ${WORKSPACE}:${WORKSPACE}:rw \
+                    -e BURP_START_URL=http://10.48.10.197 \
+                    -e BURP_REPORT_FILE_PATH=${WORKSPACE}/dastardly-report.xml \
+                    public.ecr.aws/portswigger/dastardly:latest
+                '''
+            }
+        }
+
+        stage('Deploy to Prod Environment') {
+            steps {
+                script {
+                    // Set up Kubernetes configuration using the specified KUBECONFIG
+                    //sh "ls -la"
+                    sh "sed -i 's|${DOCKER_IMAGE}:latest|${DOCKER_IMAGE}:${IMAGE_TAG}|' deployment-prod.yaml"
+                    sh "cd .."
+                    sh "kubectl apply -f deployment-prod.yaml"
+                }
+            }
+        }
+        
         stage('Check Kubernetes Cluster') {
             steps {
                 script {
@@ -93,7 +118,9 @@ pipeline {
     }
 
     post {
-
+        always {
+            junit testResults: 'dastardly-report.xml', skipPublishingChecks: true
+        }
         success {
             slackSend color: "good", message: "Build Completed: ${env.JOB_NAME} ${env.BUILD_NUMBER}"
         }
