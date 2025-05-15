@@ -58,11 +58,11 @@ def index():
             <title>Contacts</title>
         </head>
         <body>
-            <h2>Add Contacts</h2>
+            <center><h2>Add Contacts</h2></center>
             <form method="POST" action="/">
-                <label for="name">Name:</label><br>
+                <label for="name">Product Name:</label><br>
                 <input type="text" id="name" name="name" required><br>
-                <label for="phone">Phone Number:</label><br>
+                <label for="phone">SKU:</label><br>
                 <input type="text" id="phone" name="phone" required><br><br>
                 <input type="submit" value="Submit">
             </form>
@@ -70,8 +70,8 @@ def index():
             {% if contacts %}
                 <table border="1">
                     <tr>
-                        <th>Name</th>
-                        <th>Phone Number</th>
+                        <th>Product Name</th>
+                        <th>SKUr</th>
                         <th>Delete</th>
                     </tr>
                     {% for contact in contacts %}
@@ -89,7 +89,7 @@ def index():
                     {% endfor %}
                 </table>
             {% else %}
-                <p>No contacts found.</p>
+                <p>No items found.</p>
             {% endif %}
         </body>
         </html>
