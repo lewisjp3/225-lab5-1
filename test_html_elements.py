@@ -3,7 +3,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.firefox.options import Options
 import unittest
-import re
 
 class TestContacts(unittest.TestCase):
     def setUp(self):
@@ -18,11 +17,11 @@ class TestContacts(unittest.TestCase):
         driver = self.driver
         driver.get("http://10.48.10.197")  # Replace with your target website
         
-        tstRegex = re.compile(r'Test \w+')
-        for i in range(30):
-            test_name = tstRegex
-            assert test_name in driver.page_source, f"Test products not found in page source"
-        print("Test completed successfully. All test products were verified.")
+        # Check for the presence of all 10 test contacts
+        for i in range(10):
+            test_name = f'Test Name {i}'
+            assert test_name in driver.page_source, f"Test contact {test_name} not found in page source"
+        print("Test completed successfully. All 10 test contacts were verified.")
 
     def tearDown(self):
         self.driver.quit()
