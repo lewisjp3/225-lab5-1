@@ -2,7 +2,7 @@ import sqlite3
 import os
 
 DATABASE = '/nfs/demo.db'
-filepath = 'products.csv'
+filepath = '/nfs/products.csv'
 
 def connect_db():
     """Connect to the SQLite database."""
