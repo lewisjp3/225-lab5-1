@@ -7,16 +7,20 @@ def connect_db():
     """Connect to the SQLite database."""
     return sqlite3.connect(DATABASE)
 
-def generate_test_data(num_contacts):
-    """Generate test data for the contacts table."""
+def read_and_output_file(filepath):
     db = connect_db()
-    for i in range(num_contacts):
-        name = f'Test Name {i}'
-        phone = f'123-456-789{i}'
-        db.execute('INSERT INTO contacts (name, phone) VALUES (?, ?)', (name, phone))
+    with open(filepath, 'r') as file:
+        for line in file:
+            cleaned_line = line.strip()
+            parts = cleaned_line.split(',')
+            product = parts[0].strip()
+            product = "Test " + product
+            sku = parts[1].strip()
+            db.execute('INSERT INTO products (product, sku) VALUES (?, ?)', (product, sku))
     db.commit()
-    print(f'{num_contacts} test contacts added to the database.')
+    print(f'Test products added to the database.')
     db.close()
 
 if __name__ == '__main__':
-    generate_test_data(10)  # Generate 10 test contacts.
+    filepath = 'products.csv'
+    read_and_output_file(filepath)
