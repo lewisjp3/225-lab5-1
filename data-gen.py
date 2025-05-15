@@ -2,6 +2,7 @@ import sqlite3
 import os
 
 DATABASE = '/nfs/demo.db'
+filepath = 'products.csv'
 
 def connect_db():
     """Connect to the SQLite database."""
@@ -22,5 +23,4 @@ def read_and_output_file(filepath):
     db.close()
 
 if __name__ == '__main__':
-    filepath = 'products.csv'
     read_and_output_file(filepath)
