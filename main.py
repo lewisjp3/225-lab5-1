@@ -16,10 +16,10 @@ def init_db():
     with app.app_context():
         db = get_db()
         db.execute('''
-            CREATE TABLE IF NOT EXISTS products (
+            CREATE TABLE IF NOT EXISTS contacts (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                product TEXT NOT NULL,
-                sku TEXT NOT NULL
+                name TEXT NOT NULL,
+                phone TEXT NOT NULL
             );
         ''')
         db.commit()
@@ -32,52 +32,52 @@ def index():
         if request.form.get('action') == 'delete':
             contact_id = request.form.get('contact_id')
             db = get_db()
-            db.execute('DELETE FROM products WHERE id = ?', (contact_id,))
+            db.execute('DELETE FROM contacts WHERE id = ?', (contact_id,))
             db.commit()
-            message = 'Item deleted successfully.'
+            message = 'Contact deleted successfully.'
         else:
-            name = request.form.get('product')
-            phone = request.form.get('sku')
+            name = request.form.get('name')
+            phone = request.form.get('phone')
             if name and phone:
                 db = get_db()
-                db.execute('INSERT INTO products (product, sku) VALUES (?, ?)', (product, sku))
+                db.execute('INSERT INTO contacts (name, phone) VALUES (?, ?)', (name, phone))
                 db.commit()
-                message = 'Item added successfully.'
+                message = 'Contact added successfully.'
             else:
-                message = 'Missing product name or SKU.'
+                message = 'Missing name or phone number.'
 
     # Always display the contacts table
     db = get_db()
-    contacts = db.execute('SELECT * FROM products').fetchall()
+    contacts = db.execute('SELECT * FROM contacts').fetchall()
 
     # Display the HTML form along with the contacts table
     return render_template_string('''
         <!DOCTYPE html>
         <html>
         <head>
-            <title>Products</title>
+            <title>Contacts</title>
         </head>
         <body>
-            <center><h2>Add Products</h2></center>
+            <h2>Add Contacts</h2>
             <form method="POST" action="/">
-                <label for="product">Product Name:</label><br>
-                <input type="text" id="product" name="product" required><br>
-                <label for="sku">SKU:</label><br>
-                <input type="text" id="sku" name="sku" required><br><br>
+                <label for="name">Name:</label><br>
+                <input type="text" id="name" name="name" required><br>
+                <label for="phone">Phone Number:</label><br>
+                <input type="text" id="phone" name="phone" required><br><br>
                 <input type="submit" value="Submit">
             </form>
             <p>{{ message }}</p>
-            {% if products %}
+            {% if contacts %}
                 <table border="1">
                     <tr>
-                        <th>Product Name</th>
-                        <th>SKU</th>
+                        <th>Name</th>
+                        <th>Phone Number</th>
                         <th>Delete</th>
                     </tr>
-                    {% for product in products %}
+                    {% for contact in contacts %}
                         <tr>
-                            <td>{{ product['product'] }}</td>
-                            <td>{{ product['sku'] }}</td>
+                            <td>{{ contact['name'] }}</td>
+                            <td>{{ contact['phone'] }}</td>
                             <td>
                                 <form method="POST" action="/">
                                     <input type="hidden" name="contact_id" value="{{ contact['id'] }}">
@@ -89,7 +89,7 @@ def index():
                     {% endfor %}
                 </table>
             {% else %}
-                <p>No items found.</p>
+                <p>No contacts found.</p>
             {% endif %}
         </body>
         </html>
