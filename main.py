@@ -36,11 +36,11 @@ def index():
             db.commit()
             message = 'Item deleted successfully.'
         else:
-            name = request.form.get('name')
-            phone = request.form.get('phone')
+            name = request.form.get('product')
+            phone = request.form.get('sku')
             if name and phone:
                 db = get_db()
-                db.execute('INSERT INTO contacts (name, phone) VALUES (?, ?)', (name, phone))
+                db.execute('INSERT INTO products (product, sku) VALUES (?, ?)', (product, sku))
                 db.commit()
                 message = 'Item added successfully.'
             else:
@@ -48,7 +48,7 @@ def index():
 
     # Always display the contacts table
     db = get_db()
-    contacts = db.execute('SELECT * FROM contacts').fetchall()
+    contacts = db.execute('SELECT * FROM products').fetchall()
 
     # Display the HTML form along with the contacts table
     return render_template_string('''
