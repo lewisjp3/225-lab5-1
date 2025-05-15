@@ -103,6 +103,16 @@ pipeline {
             }
         }
 
+        stage('Remove Security Check Data') {
+            steps {
+                script {
+                    // Run the python script to generate data to add to the database
+                    def appPod = sh(script: "kubectl get pods -l app=flask -o jsonpath='{.items[0].metadata.name}'", returnStdout: true).trim()
+                    sh "kubectl exec ${appPod} -- python3 sec-data-clear.py"
+                }
+            }
+        }
+
         stage('Deploy to Prod Environment') {
             steps {
                 script {
