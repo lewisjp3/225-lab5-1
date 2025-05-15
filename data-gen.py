@@ -23,8 +23,6 @@ def generate_phone_number():
     
     return formatted_number
 
-
-
 def generate_test_data(num_contacts):
     """Generate test data for the contacts table."""
     db = connect_db()
