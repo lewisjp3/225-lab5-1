@@ -60,24 +60,24 @@ def index():
         <body>
             <center><h2>Add Products</h2></center>
             <form method="POST" action="/">
-                <label for="name">Product Name:</label><br>
-                <input type="text" id="name" name="name" required><br>
-                <label for="phone">SKU:</label><br>
-                <input type="text" id="phone" name="phone" required><br><br>
+                <label for="product">Product Name:</label><br>
+                <input type="text" id="product" name="product" required><br>
+                <label for="sku">SKU:</label><br>
+                <input type="text" id="sku" name="sku" required><br><br>
                 <input type="submit" value="Submit">
             </form>
             <p>{{ message }}</p>
-            {% if contacts %}
+            {% if products %}
                 <table border="1">
                     <tr>
                         <th>Product Name</th>
-                        <th>SKUr</th>
+                        <th>SKU</th>
                         <th>Delete</th>
                     </tr>
-                    {% for contact in contacts %}
+                    {% for product in products %}
                         <tr>
-                            <td>{{ contact['name'] }}</td>
-                            <td>{{ contact['phone'] }}</td>
+                            <td>{{ product['product'] }}</td>
+                            <td>{{ product['sku'] }}</td>
                             <td>
                                 <form method="POST" action="/">
                                     <input type="hidden" name="contact_id" value="{{ contact['id'] }}">
