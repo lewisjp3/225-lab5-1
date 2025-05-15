@@ -32,7 +32,7 @@ def index():
         if request.form.get('action') == 'delete':
             contact_id = request.form.get('contact_id')
             db = get_db()
-            db.execute('DELETE FROM contacts WHERE id = ?', (contact_id,))
+            db.execute('DELETE FROM products WHERE id = ?', (contact_id,))
             db.commit()
             message = 'Item deleted successfully.'
         else:
